@@ -1,0 +1,194 @@
+<ion-header>
+  <ion-navbar color="grayColor" hideBackButton="true">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons right>
+        <button (click)="playmusic()">
+            <img src="assets/imgs/bell.jpg" alt="cliniclogo" height="20" width="20" right>
+        </button>
+      </ion-buttons>
+    <ion-title text-center>GoClinic Token Screen</ion-title>
+    
+  </ion-navbar>
+</ion-header>
+
+<ion-content  class="masters">
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col col-1>
+        <div style="
+        width: 100px;max-width: 100px;
+    ">
+          <img src="{{cliniclogo}}" alt="cliniclogo" height="100" >
+          
+      </div>
+      </ion-col>
+      <ion-col col-4 class="clinicnamemargin">
+        <div>
+          <h1 class="whitecolorclass"> {{clinicName}}</h1>
+          <h1 class="whitecolorclass">{{doctorName}}</h1>
+          <p class="whitecolorclass">{{Qualifications}}</p>
+      </div>
+      </ion-col>
+      <ion-col   no-padding text-center col-3 (click)="updateclinic(clinicopen)" >
+      
+        <div>
+          <table BORDER=5 BORDERCOLOR=WHITE bgcolor="green"  class="whitecolorclass" style="
+          width: 100px;
+      " [ngClass]="{'opcncloseclass1': clinicopen == false, 'opcncloseclass': clinicopen == true}">
+              <tbody>
+                  <tr >
+                      <td text-center><h1 class="whitecolorclass2"> CLINIC </h1></td>
+                    </tr>
+                    <tr>
+                        <td text-center><h1 class="whitecolorclass2" *ngIf="clinicopen == false"> CLOSED </h1><h1 class="whitecolorclass2" *ngIf="clinicopen == true"> OPEN </h1></td>
+                      </tr>
+                     
+                      </tbody>
+                    </table>
+      </div>
+      </ion-col>
+    
+     
+   
+      <ion-col col-3>
+          <img src="https://goclinic.app/loading/Powered by.png" alt="cliniclogo" height="100" width="300" >
+      </ion-col>
+    </ion-row> 
+
+
+    <ion-row>
+        <ion-col size="6">
+          
+            <ion-row class="borderrow">
+                <ion-col>
+                    <div>
+                      
+                        <ion-input value="{{mobile}}" text-center  readonly class="inputfornumber" maxlength="13" style="font-size: 30px"></ion-input>
+                        <div class="buttonfornums">
+                          <div class="buttonfornum" (click)="addnum(1)">1</div>
+                          <div class="buttonfornum" (click)="addnum(2)">2</div>
+                          <div class="buttonfornum" (click)="addnum(3)">3</div>
+                          <div class="buttonfornum" (click)="addnum(4)">4</div>
+                          <div class="buttonfornum" (click)="addnum(5)">5</div>
+                          <div class="buttonfornum" (click)="addnum(6)">6</div>
+                          <div class="buttonfornum" (click)="addnum(7)">7</div>
+                          <div class="buttonfornum" (click)="addnum(8)">8</div>
+                          <div class="buttonfornum" (click)="addnum(9)">9</div>
+                          <div class="buttonfornum" (click)="removenum()"><ion-icon ios="ios-backspace" md="md-backspace"></ion-icon></div>
+                          <div class="buttonfornum" (click)="addnum(0)">0</div>
+                          <div class="buttonfornum" (click)="getq()">GO</div>
+                        </div>
+                    </div>
+                </ion-col>
+                <ion-col>
+                    <div  class="enternumclass">
+               <h1 class="whitecolorclass"  text-center >Self Registration</h1>
+           
+             
+               <table BORDER=0 BORDERCOLOR=ORANGE >
+                <tbody>
+                
+                    <tr >
+                        <td text-center  *ngIf="hidediv == true"  (click)="getq()">    <h4 class="whitecolorclass4"> Please Enter your Number and Press <small style="font-size: 30px; color:rgb(13, 221, 13);">GO</small> </h4><h5 class="whitecolorclass"  text-center>OR</h5></td>
+                        <td text-center  *ngIf="hidediv !== true" class="blink"><h4 class="whitecolorclass4"> Please check your SMS for your <small style="font-size: 30px; color:rgb(13, 221, 13);">Token Number</small></h4></td>
+                      </tr>
+                   
+                        </tbody>
+                      </table>
+                        <table BORDER=5 BORDERCOLOR=ORANGE text-center style=" display: flex;
+                        justify-content: center;">
+                            <tbody BORDER=0>
+                            
+                                <tr style="border: 0px solid white;  
+                                border-color:#484745">
+                                    <td text-center >      <h2 class="whitecolorclass1"  text-center >Give Misscall to </h2>
+                                      <h2 class="whitecolorclass"  text-center  style="font-size: 35px">{{misscallnumber}}</h2>
+                                      <h3 class="whitecolorclass" text-center>and get your token number</h3></td>
+                                  </tr>
+                               
+                                    </tbody>
+                                  </table>
+                            </div>
+                            <div  align="center">
+                              <table BORDER=2 BORDERCOLOR=WHITE bgcolor="green"  class="whitecolorclass" style="
+                              width: 100px;
+                          " [ngClass]="{'inoutclass': doctorinout==2, 'inoutclass1': doctorinout==3, 'inoutclass2': doctorinout==4, 'inoutclass3': doctorinout==5, 'inoutclass4': doctorinout==6, 'inoutclass5': doctorinout==7}">
+                                  <tbody>
+                                      <tr *ngIf="doctorinout === 1 || doctorinout === 2 || doctorinout === 3">
+                                          <td text-center ><h5 class="whitecolorclass2"> DOCTOR </h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td text-center><h1 class="whitecolorclass2" *ngIf="doctorinout == 1"> IN </h1><h1 class="whitecolorclass2"*ngIf="doctorinout == 2"> OUT OF</h1><h1 class="whitecolorclass2"*ngIf="doctorinout == 3"> OUT</h1><h1 class="emergencyclass"*ngIf="doctorinout == 4">PROCEDURE</h1><h1 class="emergencyclass"*ngIf="doctorinout == 5">EMERGENCY</h1><h1 class="emergencyclass"*ngIf="doctorinout == 7">ROUNDS</h1></td>
+                                          </tr>
+                                          <tr *ngIf="doctorinout === 1 || doctorinout === 2 || doctorinout === 3">
+                                              <td text-center><h5 class="whitecolorclass2" *ngIf="doctorinout === 1 || doctorinout === 2"> CLINIC </h5><h5 class="whitecolorclass2" *ngIf="doctorinout == 3"> STATION </h5></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                          </div>
+                </ion-col>
+            </ion-row>
+
+
+
+
+        </ion-col>
+        
+        <ion-col col-4 >
+            <div>
+                <table BORDER=5 BORDERCOLOR=ORANGE >
+                    <tbody>
+                        <tr >
+                            <td text-center ><h2  class="whitecolorclass" style="padding-top: 0 !important;   
+                              padding-bottom: 0 !important;font-size: 3.2rem;"> &nbsp; <ion-icon  name="arrow-back"></ion-icon><small style="border-right: 3px solid orange;
+                              height: 50px; font-size: 118%;">&nbsp;</small> 
+ Current Token No <small style="border-right: 3px solid orange;
+                              height: 50px; font-size: 118%;">&nbsp;</small>  <ion-icon  name="arrow-forward" ></ion-icon>&nbsp;&nbsp;</h2></td>
+                          </tr>
+                         
+                        <tr >
+                            <td text-center ><h1 class="redcolorclass" style="    font-size: 50px;color: #484745;" *ngIf="currq === 0" >HI</h1><h1 class="redcolorclass" style="    font-size: 50px" *ngIf="tokendata.currentpatinetststus === 'Now' || tokendata.currentpatinetststus=== 'Next' && currq !== 0" >{{tokendata.currentpatinetststus}}</h1><h1 class="redcolorclass" style="    font-size: 50px" *ngIf="tokendata.currentpatinetststus !== 'Now' && tokendata.currentpatinetststus !== 'Next' && currq !== 0" >Consulting</h1><h1 class="whitecolorclass5"  [ngClass]="{'whitecolorclass6': currqlength==3}">{{currq}} </h1></td>
+                          </tr>
+                       
+                            </tbody>
+                          </table>
+            </div>
+        </ion-col>
+     
+      </ion-row>
+      <ion-row style="      border: think solid orange;">
+        <ion-col col-4>
+          <div>
+            <img style="margin-left: 53px;"src="assets/imgs/reg.png" alt="cliniclogo" height="100" (click)="getq()">
+            
+        </div>
+        </ion-col>
+        <ion-col col-4>
+          <div align="center">
+            <img src="assets/imgs/checkin.png" alt="cliniclogo" height="100" (click)="checkin()">
+        </div>
+        </ion-col>
+        <ion-col col-4 text-center>
+          <div>
+              <h1 class="redcolorclassname" *ngIf="currq == 0" >Welcome</h1>
+            <h1 class="redcolorclassname" *ngIf="currq !== 0" >{{tokendata.currnetpatinetname}}</h1>
+        </div>
+        </ion-col>
+      
+       
+     
+        
+      </ion-row> 
+
+
+  </ion-grid>
+
+
+
+
+
+</ion-content>
+

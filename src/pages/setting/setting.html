@@ -1,0 +1,48 @@
+<!--
+  Generated template for the SettingPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar  color="primary">
+      <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+    <ion-title>Setting</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>Auto Start</ion-label>
+      <ion-toggle [(ngModel)]="autostarting" (ionChange)="autostartup()" ></ion-toggle>
+    </ion-item>
+    <div class="bottomline"></div>
+    <ion-item>
+      <ion-label>Issue token on call us </ion-label>
+      <ion-toggle [(ngModel)]="incomingcall" (ionChange)="incomingcallstatus()" ></ion-toggle>
+    </ion-item>
+  
+    <div class="bottomline"></div>
+   <!--<ion-item>
+      Customised Booking Message
+      <button item-right ion-button color="secondary" (click)="gotopage(CstbookingPage)"> Update</button>
+    </ion-item>
+   
+    <div class="bottomline"></div>
+    <ion-item>
+      Customised Clinic Closed Message
+      <button item-right ion-button color="secondary"> Update</button>
+    </ion-item>
+   
+    <div class="bottomline"></div>--> 
+  </ion-list>
+ 
+ 
+   
+</ion-content>

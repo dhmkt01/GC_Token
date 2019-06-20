@@ -1,0 +1,302 @@
+
+ // http://ionicframework.com/docs/v2/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+.toolbar-title-md{
+    font-weight: normal;
+}
+.fab-md{
+    @include box-shadow(0,3px,6px,0,0.2);
+}
+.saveColor{
+    background-color: darken(color($colors,secondary),4%) !important;
+}
+
+// App statusbar(IOS platform) Sass
+// --------------------------------------------------
+.statusbar-padding{
+    padding-top: calc(20px + 4px);
+    min-height: calc(56px + 20px);
+    &.search-toolbar{
+        top: 24px;
+        padding-top: 4px;
+        min-height: 45px;
+    }
+}
+
+.md ion-menu{
+    .menu-inner{
+        ion-header{
+            .toolbar.statusbar-padding{
+                &:first-child{
+                    min-height: 180px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 767px){
+    .md .modal-wrapper > .ion-page > ion-header > .share-toolbar.statusbar-padding:first-child{
+        padding-top: 4px;
+        min-height: 56px;
+    }
+}
+
+ion-modal {
+  ion-backdrop {
+      visibility: visible;
+  }
+  .modal-wrapper {
+      width:94%;
+      height: 94%;
+      margin: 3%;
+      position: absolute;
+      border-radius: 13px;
+      overflow: hidden;
+  }
+}
+
+// App Main Menu Sass
+// --------------------------------------------------
+ion-menu{
+    ion-header{
+        &::after{
+            display: none;
+        }
+    }
+    .toolbar-md{
+        min-height: 160px;
+        padding: 4px 15px;
+        align-items: flex-end;
+        img{
+            opacity: 0.7;
+            width: 50px;
+            height: 50px;
+            
+        }
+        p{
+            @extend %overflow;
+            color: color($colors , light);
+        }
+    }
+    .toolbar-background-md{
+        @extend %cover;
+        background-image: url(../assets/imgs/menu-head.png);
+    }
+    ion-list{
+        padding: 10px 15px;
+    }
+    .item-md{
+        background: none;
+        font-size: 1.3rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        ion-icon{
+            font-size: 2rem;
+            min-height: 2rem;
+            color: color($colors,secondary);
+        }
+    }
+    .item-inner{
+        margin-left: 20px !important;
+    }
+    .social{
+        border-top: 1px solid lighten(color($colors , grayColor),35%) !important;
+        padding: 10px 0;
+        margin-top: 10px;
+        .item-md{
+            font-size: 1.1rem;
+        }
+        i{
+            font-size: 1.5rem;
+            min-height: 2.3rem;
+            color: color($colors,light);
+            display: inline-block;
+            &:before{
+                width: 21px;
+                height: 21px;
+                line-height: 1.5em;
+                margin: 0 4px 0 0;
+                border-radius: 50%;
+            }
+        }
+        .fb{
+            &:before{
+                background-color: color($colors,facebook,base);
+            }
+        }
+        .tw{
+            &:before{
+                background-color: color($colors,twitter,base);
+            }
+        }
+    }
+    .log-out{
+        .button-clear-md{
+            color: white;
+            font-size: 1.3rem;
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+        [icon-right]{
+            ion-icon{
+                font-size: 2.2em;
+            }
+        }
+    }
+    .footer-md{
+        padding-bottom: 10px;
+        &::before{
+            display: none;
+        }
+    }
+}
+.ttitle {
+    
+   
+    transform: translate(0, 0);
+    color: rgba(255, 255, 255, 0.80);
+    font-style: oblique;
+    font: bold 30px/1.5 Arial, sans-serif;
+    opacity: 0.9;
+ }.arrivalupdatemsg{
+    color: black;
+    h2 {
+        margin-top: 0rem;
+        font-size: 5.4rem;
+    }
+    .alert-sub-title {
+        font-size: 59px;
+        text-align: center;
+    }
+    .alert-title {
+        font-size: 65px;
+        text-overflow: ellipsis;
+    overflow: hidden;
+    width: 800px;
+    height: 1.2em;
+    white-space: nowrap;
+        
+    }
+     .alert-wrapper {
+      text-align: center;
+      border-radius: 22px;
+      /* max-width: 328px; */
+     
+      min-width: 861px;
+      background-color: #fafafa;
+      -webkit-box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+    }
+ }
+ .showtokennumber{
+   
+    color: black;
+    h3 {
+        margin-top: 0rem;
+        font-size: 11.4rem;
+    }
+    h2 {
+        margin-top: 0rem;
+        font-size: 59px;
+        text-align: center;
+        font-weight:normal;
+    }
+    .alert-sub-title {
+        font-size: 59px;
+        text-align: center;
+    }
+    .alert-title {
+        font-size: 65px;
+        text-overflow: ellipsis;
+    overflow: hidden;
+    width: 800px;
+    height: 1.2em;
+    white-space: nowrap;
+        
+    }
+     .alert-wrapper {
+      text-align: center;
+      border-radius: 22px;
+      /* max-width: 328px; */
+      min-height: 700px;
+      min-width: 861px;
+      background-color: #fafafa;
+      -webkit-box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .inputnameclass{
+    .alert-button {
+        text-align: right;
+        text-align: end;
+        border-radius: 2px;
+        position: relative;
+        overflow: hidden;
+        font-size: 30px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: #0277bd;
+        background-color: transparent;
+        margin: 0 8px 0 0;
+        padding: 10px;
+    }
+    .alert-input {
+        font-size: 70px;
+        margin: 5px 0;
+        border-bottom: 1px solid #dedede;
+        color: #000;
+    }
+    .alert-title {
+        font-size: 30px;
+        text-align: center;
+    }
+    .alert-wrapper {
+        border-radius: 2px;
+        max-width: 820px;
+        background-color: #fafafa;
+        -webkit-box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    
+  }
+  .arrivalcheckinclass{
+    .alert-button {
+        text-align: right;
+        text-align: end;
+        border-radius: 2px;
+        position: relative;
+        overflow: hidden;
+        font-size: 30px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: #0277bd;
+        background-color: transparent;
+        margin: 0 8px 0 0;
+        padding: 10px;
+    }
+    .alert-input {
+        font-size: 50px;
+        margin: 5px 0;
+        border-bottom: 1px solid #dedede;
+        color: #000;
+    }
+    .alert-title {
+        font-size: 30px;
+        text-align: center;
+    }
+    .alert-wrapper {
+        border-radius: 2px;
+        max-width: 429px;
+        background-color: #fafafa;
+        -webkit-box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+    }
+
+   
+  }

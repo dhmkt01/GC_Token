@@ -1,0 +1,73 @@
+page-login {
+
+    .form-content{
+        background-color: color($colors , primary);
+        .scroll-content{
+            margin-bottom: 0px !important;
+            padding: 0px !important;
+        }
+        p{
+            font-weight: normal !important;
+            color: color($colors , light);
+        }
+    }
+    
+    .Loginpage{
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+        .formContainer{
+            padding: 22px;
+            width: 100%;
+        }
+    }
+    
+    .app-form{
+        .list-md{
+            padding: 10px;
+            margin-bottom: 40px;
+            .item-md{
+                background: none;
+                border-bottom: 1px solid rgba(color($colors , light) , .6) !important;
+            }
+            ion-label{
+                color: rgba(color($colors , light) , .6);
+                font-size: 1.55rem;
+            }
+        }
+        .text-input{
+            color: white;
+        }
+        .label-md[floating]{
+            color: rgba(color($colors , light) , .6);
+        }
+        .button-md{
+            font-size: 2rem;
+            color: color($colors , light);
+            background-color: color($colors , secondary);
+            font-weight: normal;
+        }
+        .header__title {
+            
+            float: center;
+            font-size: 35px;
+            font-weight: 400;
+            text-rendering: auto;
+            margin-top: 12px;
+            margin-left: 25px;
+            
+            transform: translate(0, 0);
+            color: rgba(255, 255, 255, 0.80);
+            font-style: oblique;
+            font: bold 30px/1.5 Arial, sans-serif;
+            opacity: 0.9;
+          }
+         
+            .image1{
+                max-width: 50px;
+                max-height: 50px;
+                margin-bottom: 10px;
+                opacity: 0.7;
+            }
+    }
+ }

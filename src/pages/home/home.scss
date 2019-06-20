@@ -1,0 +1,210 @@
+page-home {
+    .masters {
+        background-color: #484745;
+      }
+      .buttonclass{
+        border-radius: 0px;
+        height: 2.4em;
+       font-size: 2.0rem;
+       width:2.4em;
+      //  color: #fff;
+       // background-color: #0277bd;
+        margin: 0.4rem 0.2rem;
+        padding: 0 1em;
+      
+      }
+      
+      .buttonclasstxt{
+        border-radius: 0px;
+        height: 2.4em;
+        width: 2.4em;
+        font-size: 2.0rem;
+      //  color: #fff;
+       // background-color: #0277bd;
+        margin: 0.4rem 0.2rem;
+        padding: 0 1em;
+      
+      }
+      .buttonfornums {
+        display: flex;
+        font-family: Helvetica;
+        font-weight: 400;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin: 0 auto;
+        width: 310px;
+      }
+      .redcolorclassname{
+        color:white;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: underline;
+        font-size: 60px;
+      }
+      .buttonfornum {
+        border: 1px solid white;
+        border-radius: 50px;
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 30px;
+        height: 60px;
+        line-height: 60px;
+        margin: 10px;
+        text-align: center;
+        width: 60px;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+      }
+      
+      .buttonfornum:hover {
+        background-color: #006494;
+        color: #FFFFFF;
+      }
+      .inputfornumber{
+        background: white;
+        margin: 9px 11px 11px 0;
+        padding: 4px;
+        width:calc(100% - 61px)
+       // background-image: initial;
+      }
+      .whitecolorclass1{
+        color:white;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 35px;
+      }
+      .redcolorclass{
+        color:white;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: underline;
+      }
+      .whitecolorclass{
+        color:white;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+    line-height: 1;
+      }.whitecolorclass5{
+        color:white;
+        font-weight: 3000;
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+        margin-right: 2rem;
+        margin-left: 2rem;
+        font-size: 232px;
+       
+      }
+      .whitecolorclass6{
+        color: white;
+        font-weight: 1500;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+        /* margin-right: 3rem; */
+        /* margin-left: 3rem; */
+        font-size: 203px;
+      }
+      .whitecolorclass2{
+        margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+    line-height: 1;
+    color:white;
+      }.enternumclass{
+      // padding: 20px;
+       //margin-top: 100px;
+      }
+      .clinicopen{
+        background-color: #484745;
+        color:white;
+        border: #006494;
+        font-size: 15px;
+      }
+      .clinicnamemargin{
+        margin-left: 27px;
+      }
+      .whitecolorclass4{
+         color:white;
+         font-size: 20px;
+      }
+      .pandingclass{
+        padding: 15px;
+      }
+      .inoutclass{
+        background: orange;
+      }
+      .inoutclass1{
+        background: brown;
+      }
+      .inoutclass2{
+        background: #0D02FC;
+      }
+      .inoutclass3{
+        background: #FC0303;
+      }
+      .inoutclass4{
+        background: #EC0D7F;
+      }.myColor {
+        background-color: #484745;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        color: white;
+      }
+      .inoutclass5{
+        background: #13C0BB;
+      }.opcncloseclass{
+        background: #13C0BB;
+      }.opcncloseclass1{
+        background: pink;
+      }.emergencyclass
+      {
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+        font-weight: 500;
+        line-height: 1;
+        color: white;
+        font-size: 53px;
+        width: 400px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      .widthheight{
+        //max-height:100px;
+        width: 180px;
+        max-width: 120%;
+      }
+      .borderrow{
+        border-style: solid;
+        border-color: orange;
+      }
+      @-webkit-keyframes blinker {
+        from {opacity: 1.0;}
+        to {opacity: 0.0;}
+      }
+      .blink{
+        text-decoration: blink;
+        -webkit-animation-name: blinker;
+        -webkit-animation-duration: 0.6s;
+        -webkit-animation-iteration-count:infinite;
+        -webkit-animation-timing-function:ease-in-out;
+        -webkit-animation-direction: alternate;
+      }
+    
+   
+}

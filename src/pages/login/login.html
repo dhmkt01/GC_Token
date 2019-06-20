@@ -1,0 +1,30 @@
+
+
+<ion-content class="form-content" padding>
+  <div class="Loginpage">
+      <div class="formContainer">
+         <form  [formGroup]="form"
+         (ngSubmit)="logIn()" class="app-form" text-center>
+
+
+          <h1 class="header__title">GoClinic <img class="image1" src="assets/imgs/goclinic2.png"></h1>
+          <ion-list>
+            <ion-item no-padding no-lines>
+              <ion-label floating>Email</ion-label>
+              <ion-input  type="email"
+              formControlName="email"></ion-input>
+            </ion-item>
+            <ion-item no-padding no-lines>
+              <ion-label floating>Password</ion-label>
+              <ion-input type="password"
+              formControlName="password"></ion-input>
+            </ion-item>
+          </ion-list>
+          <button ion-button block strong text-uppercase color="grayColor" block  >login</button>
+       
+        </form>
+
+
+      </div>
+  </div>
+</ion-content>
