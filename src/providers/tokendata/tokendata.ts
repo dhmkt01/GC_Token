@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import 'firebase/auth';
 import 'firebase/database'; 
 import { AlertController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 declare var SMS: any;
 /*
   Generated class for the TokendataProvider provider.
@@ -23,7 +24,7 @@ export class TokendataProvider {
   currentpatinetststus: any;
   currqis: firebase.database.DataSnapshot;
   clinicname: string;
-  constructor(private batteryStatus: BatteryStatus,private alertCtrl:AlertController,public zone:NgZone) {
+  constructor(private batteryStatus: BatteryStatus,private alertCtrl:AlertController,public zone:NgZone, private storage: Storage) {
   
    // console.log('Hello TokendataProvider Provider');
     this.clinicdetails = {};
@@ -77,7 +78,13 @@ export class TokendataProvider {
     });  
 }
 getpath(){
-  this.reminderlists();
+  this.storage.get('incomingcall').then((val) => {
+    if(val == true){
+   
+      this.reminderlists();
+    }    
+    });
+
   this.rootpath =   firebase.database().ref('clinicDtl').child(this.clinicid)
 }
 getclinicroot(){
@@ -407,6 +414,7 @@ getnewtokenwithdata(misscallnum: any,tokennum: number,patientname: any,data: str
   });  
 
 }
+
 getpatientlist(tokenNumber,idata):  Promise<any> { 
   console.log(idata);
   console.log("called to gat patient data");
@@ -415,7 +423,7 @@ getpatientlist(tokenNumber,idata):  Promise<any> {
   return new Promise<any>((resolve, reject) => {
       firebase.database().ref('clinicList')
       .child(clinc).child("patientList").orderByChild("tokenNumber").equalTo(tokenNumber)
-      .on('value', data => { 
+      .once('value', data => { 
         firebase.database().ref('clinicDtl')
         .child(this.clinicid).child(idata)
         .on('value', currquid => {  
@@ -427,14 +435,16 @@ getpatientlist(tokenNumber,idata):  Promise<any> {
             if (details.hasOwnProperty(k)) {
               firebase.database().ref('clinicList')
               .child(clinc).child('patientList').child(k)
-              .on('value', datai => {  
+              .once('value', datai => {  
+                if(currquid.val() == tokenNumber){
                 that.zone.run(() => {
            that.currnetpatinetname =   datai.val().patientName;
            that.currentpatinetststus = datai.val().status;
-           console.log(that.currentpatinetststus)
+           console.log(datai.val().status)
                   resolve(datai.val());
       
                 })
+              }
               });
               
             }

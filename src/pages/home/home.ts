@@ -51,6 +51,8 @@ export class HomePage {
   estdocdate: any;
   currentpatientstatus: any;
   nextq: any;
+  clinicalerton:boolean;
+  clinicalert: any;
   constructor(public navCtrl: NavController,
     private _AUTH     : AuthProvider,
     private tokendata :TokendataProvider,
@@ -308,6 +310,14 @@ getclinicdetails(){
       this.clinicopen = data.val().clinicopen;
       this.estdoctime = data.val().estdoctime;
       this.estdocdate = data.val().estdocdate;
+      if(data.val().clinicalerton == null || data.val().clinicalerton == undefined){
+        this.clinicalerton = false;
+      }else{
+        this.clinicalerton = data.val().clinicalerton;
+      }
+      
+      this.clinicalert = data.val().clinicalert;
+   
        if(this.clinicopen == true){
   this.clinicopenstatus = "Clinic Open";
       }else if(this.clinicopen == false){
@@ -446,6 +456,7 @@ getnewtokenwithdata(data,misscallnum,patientname,arrival,nymber){
   this.tokendata.getnewtokenwithdata(misscallnum,nymber,patientname,data,arrival).then((result: any) => {
     if (result) {
       this.sendmsmwithnameestmin(nymber,misscallnum,arrival,patientname);
+      
    // this.sendmessagewithname(result,misscallnum,patientname)
   //this.misscallsmswithname(result,misscallnum,patientname);
     
@@ -459,6 +470,7 @@ getnewtoken(number: number,misscallnum: any,data: any,arrival: string){
   this.tokendata.getnewtoken(misscallnum,number,data,arrival).then((result: any) => {
     if (result) {
       this.sendmsmwithestmin(result,misscallnum,arrival);
+      
   //this.misscallsms(result,misscallnum);
   // this.sendmessage(result,misscallnum); 
     }else{
@@ -466,33 +478,20 @@ getnewtoken(number: number,misscallnum: any,data: any,arrival: string){
    }
   })
 }
-misscallsmswithname(number,misscallnum,patientname){
-  var misn = (number-1)*this.esttime;
-  var message  = "Hi "+patientname.substring(0,10)+",Thanks for reg with "+this.clinicName.substring(0,21)+",Your token is "+number+" est wait is "+misn+" min.Book thru App next time for live status and more is.gd/goclinic" ;
-  SMS.sendSMS(misscallnum, message,function(result){
-    //alert(result); 
-   if(result){
- 
-   }
-   
-   }, function(e){
-    alert('Error sending SMS.'+e); 
-   });
-}
-misscallsms(number,misscallnum){
-  var misn = (number-1)*this.esttime;
-  var message  = "Thankyou for reg with "+this.clinicName.substring(0,21)+", Your token num is "+number+" est wait time is "+misn+" min. Book thru App next time for live token status and more is.gd/goclinic" ;
-  SMS.sendSMS(misscallnum, message,function(result){
-    //alert(result); 
-   if(result){
- 
-   }
-   
-   }, function(e){
-    alert('Error sending SMS.'+e); 
-   });
 
+sendclinicalert(misscallnum){
+  var message = this.clinicalert.substring(0,150)
+  SMS.sendSMS(misscallnum, message,function(result){
+  
+    if(result){
+     
+    }
+     
+   }, function(e){
+      alert('Error sending SMS.'+e); 
+    });
 }
+
 getpatientlist(tokenNumber,idata){
   this.tokendata.getpatientlist(tokenNumber,idata).then((result: any) => {
     if (result) {
@@ -762,33 +761,38 @@ clinicclosedmessage(misscallnum){
   });
 }
 sendmsmwithestmin(number,misscallnum,est){
+  var this_ = this;
   var misn = est;
-  var message  = "Thanks for reg with "+this.clinicName.substring(0,20)+", Your token is "+number+" est visiting time "+misn+".Book thru App next time for live status and more is.gd/goclinic" ;
+  var message  = "Thanks for reg with "+this_.clinicName.substring(0,20)+", Your token is "+number+" est visiting time "+misn+".Book thru App next time for live status and more is.gd/goclinic" ;
   SMS.sendSMS(misscallnum, message,function(result){
-
-   if(result){
-  
+ 
+    if(result == 'OK'){
+    if(this_.clinicalerton == true){
+      this_.sendclinicalert(misscallnum);
+     }
    }
     
   }, function(e){
      alert('Error sending SMS.'+e); 
    });
- 
+  
 }
 sendmsmwithnameestmin(number,misscallnum,est,name){
   var misn = est;
-  
-  var message  = "Hi "+name.substring(0,10)+",Thanks for reg with "+this.clinicName.substring(0,21)+",Your token is "+number+" est visiting time "+misn+".Book thru App next time for live status is.gd/goclinic" ;
+  var this_ = this;
+  var message  = "Hi "+name.substring(0,10)+",Thanks for reg with "+this_.clinicName.substring(0,21)+",Your token is "+number+" est visiting time "+misn+".Book thru App next time for live status is.gd/goclinic" ;
   
    SMS.sendSMS(misscallnum, message,function(result){
-
-    if(result){
-  
-   }
+    if(result == 'OK'){
+      if(this_.clinicalerton == true){
+        this_.sendclinicalert(misscallnum);
+       }
+     }
     
   }, function(e){
      alert('Error sending SMS.'+e); 
   });
+  
 }
 
 getcurrenttime(){
