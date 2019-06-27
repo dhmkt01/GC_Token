@@ -125,7 +125,7 @@ getmisscallpatientdetails(misscallnum):  Promise<any> {
      
   });  
 }
-getnewtoken(misscallnum: any,tokennum: number,data: string,arrival: string) :  Promise<any> { 
+getnewtoken(misscallnum: any,tokennum: number,data: string,arrival: string,estimatedtime:any) :  Promise<any> { 
   
   if(data == "call"){
     var reginstat =  "Registered";
@@ -159,7 +159,7 @@ getnewtoken(misscallnum: any,tokennum: number,data: string,arrival: string) :  P
    
    }).then((snap) => {
     // firebase.database().ref('clinicList').child(clinicid).child('Misscall').update({ number: "fresh" })
-     firebase.database().ref('clinicDtl').child(clinicid).update({ newQ: tokennum });
+     firebase.database().ref('clinicDtl').child(clinicid).update({ newQ: tokennum,estimatedtime:estimatedtime });
      that.callwaiting = true;
               resolve(tokennum);
               if(data == "mobile"){
@@ -367,7 +367,7 @@ getmisscallesistingdata(misscallnum){
   
 });
 }
-getnewtokenwithdata(misscallnum: any,tokennum: number,patientname: any,data: string,arrival: any) :  Promise<any> { 
+getnewtokenwithdata(misscallnum: any,tokennum: number,patientname: any,data: string,arrival: any,estimatedtime:any) :  Promise<any> { 
   if(data == "call"){
     var registeras = "images/misscall.png"
     var restatus = "Registered";
@@ -400,7 +400,7 @@ getnewtokenwithdata(misscallnum: any,tokennum: number,patientname: any,data: str
        
        }).then(function(){
         // firebase.database().ref('clinicList').child(clinicid).child('Misscall').update({ number: "fresh" })
-         firebase.database().ref('clinicDtl').child(clinicid).update({ newQ: tokennum });
+         firebase.database().ref('clinicDtl').child(clinicid).update({ newQ: tokennum,estimatedtime: estimatedtime});
          if(data == "mobile"){
           
            __this.showtokennumber(patientname,tokennum,arrival);

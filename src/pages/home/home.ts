@@ -53,6 +53,8 @@ export class HomePage {
   nextq: any;
   clinicalerton:boolean;
   clinicalert: any;
+  estimatedtime: number;
+  emergtime: any;
   constructor(public navCtrl: NavController,
     private _AUTH     : AuthProvider,
     private tokendata :TokendataProvider,
@@ -71,7 +73,6 @@ export class HomePage {
 this.apiurl =  'https://api.goclinic.sg/miss.php';
 
 this.date = new Date();
-   
 
 
 this.currenttime=     moment().format('HH:mm');
@@ -267,23 +268,16 @@ sendsmsforexist(est,misscallnum,number){
 incomingnumber(){
   this.tokendata.checkincomingifexists(this.callingnumber.substring(3)).then((result: any) =>{
     if(result == 0){
-      this.checkpatientdata(this.callingnumber.substring(3),"call");
+      this.step1(this.callingnumber.substring(3),"call");
+      //this.checkpatientdata(this.callingnumber.substring(3),"call");
     }else{
-      this.sendexistsms(this.callingnumber.substring(3));
+     // this.sendexistsms(this.callingnumber.substring(3));
     }
    });
   
 
 }
-updatemisscalldirectiory(){
-  this.tokendata.onloadupdate().then((result: any) => {
-    if (result == true) {
-      this.getmisscall();
-    }
- })
- 
 
-}
 public updateclinic(open){
 if(open == false){
   this.tokendata.updateclinic(true);
@@ -310,6 +304,15 @@ getclinicdetails(){
       this.clinicopen = data.val().clinicopen;
       this.estdoctime = data.val().estdoctime;
       this.estdocdate = data.val().estdocdate;
+      this.emergtime = data.val().emergtime;
+      if(data.val().estimatedtime == undefined || data.val().estimatedtime == null){
+        this.estimatedtime = 0;
+      }else{
+        this.estimatedtime = data.val().estimatedtime;
+      }
+     
+     
+//alert(moment(this.estimatedtime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'));
       if(data.val().clinicalerton == null || data.val().clinicalerton == undefined){
         this.clinicalerton = false;
       }else{
@@ -379,104 +382,338 @@ var idata = 'nextQ';
     
 });
 }
-getmisscall(){
-  this.tokendata.rootformisscall().on('value', data => {      
-   
-     this.zone.run(() => {
 
-       this.misscallnum  = data.val().number.substring(3);
-       if(this.misscallnum !== "sh"){
-        this.checkpatientdata(this.misscallnum,"call");
-       }
-     
-     
-   });
-     
- });
-}
-checkpatientdata(misscallnum,data){
-  if(this.clinicopen == true){
-    if(this.doctorinout == 3){
-      if(this.estdocdate !== null && this.estdocdate !==undefined){
-        this.sendestdate(misscallnum);
-       }else{
-        this.clinicclosedmessage(misscallnum);
-       }
-    }else{
-      this.tokendata.checkmisscalldata(misscallnum).then((result: any) => {
-        if (result) {
-          this.getmisscallpatientdetails(misscallnum,data);
-          
-        
-        }else{
-          this.sendmessage(misscallnum,data); 
-        //  this.getnewtoken(misscallnum,data);
-        }
-      })
-    }
-
+step1(misscallnum,data){
+if(this.clinicopen == true){
+  this.step2(misscallnum,data);
 }else{
-  if(this.doctorinout == 3){
-    if(this.estdocdate !== null && this.estdocdate !==undefined){
-      this.sendestdate(misscallnum);
+  this.clinicclosedmessage(misscallnum);
+}
+}
+
+step2(misscallnum,data){
+        if(this.doctorinout == 1){
+    this.inbooking(misscallnum,data);
+  }else if(this.doctorinout == 2){
+    this.outbooking(misscallnum,data)
+  }else if(this.doctorinout == 3){
+    this.osbooking(misscallnum,data);
+  }else if(this.doctorinout == 4){
+    this.inbooking(misscallnum,data);
+  }else if(this.doctorinout == 5){
+    this.emergbooking(misscallnum,data);
+  }else if(this.doctorinout == 6){
+    this.inbooking(misscallnum,data);
+  }else if(this.doctorinout == 7){
+    this.inbooking(misscallnum,data);
+  }
+
+}
+
+inbooking(misscallnum,data){
+var number = this.newnumer+1
+  if(this.estimatedtime == 0){
+    var mins = 0;
+    this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),mins),moment().format('YYYY-MM-DD HH:mm'),number);
+  }else{
+
+    var currenttime = moment(moment().format('YYYY-MM-DD HH:mm')).format('HH:mm');
+    var estimated = moment(this.estimatedtime).format('HH:mm');
+    if(moment(this.estimatedtime).format('YYYY-MM-DD') == moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+    
+      if(currenttime < estimated){
+               
+        this.step3(misscallnum,data,this.addminsintime(moment(this.estimatedtime).format('HH:mm'),this.esttime),moment(this.estimatedtime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+         }else{
+        this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),this.esttime),moment(moment().format('YYYY-MM-DD HH:mm')).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+         }
+      
+      
+        }else if(moment(this.estimatedtime).format('YYYY-MM-DD') < moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+          this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),this.esttime),moment(moment().format('YYYY-MM-DD HH:mm')).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+        }else if(moment(this.estimatedtime).format('YYYY-MM-DD') > moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+          this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),this.esttime),moment(moment().format('YYYY-MM-DD HH:mm')).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+        }
+
+
+
+
+
+
+           
+  }
+ 
+}
+outbooking(misscallnum: any,data: any){
+  var number = this.newnumer+1
+  
+ if(this.estimatedtime == 0){
+  var mins = 0;
+  var currenttime = moment(moment().format('YYYY-MM-DD HH:mm')).format('HH:mm');
+  var estimated = moment(this.estdoctime).format('HH:mm');
+  if(moment(moment().format(this.estdoctime)).format('YYYY-MM-DD') == moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+    
+if(currenttime < estimated){
+               
+    this.step3(misscallnum,data,this.addminsintime(moment(this.estdoctime).format('HH:mm'),mins),moment(this.estdoctime).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
      }else{
-      this.clinicclosedmessage(misscallnum);
+    this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),mins),moment(moment().format('YYYY-MM-DD HH:mm')).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
+     }
+
+
+  }else if(moment(moment().format(this.estdoctime)).format('YYYY-MM-DD') < moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+    this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),mins),moment(moment().format('YYYY-MM-DD HH:mm')).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
+
+  }else if(moment(moment().format(this.estdoctime)).format('YYYY-MM-DD') > moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+    this.step3(misscallnum,data,this.addminsintime(moment(this.estdoctime).format('HH:mm'),mins),moment(this.estdoctime).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
+  }
+
+  
+
+
+ }else{
+
+  var currenttime = moment(moment().format('YYYY-MM-DD HH:mm')).format('HH:mm');
+  var estimated = moment(this.estdoctime).format('HH:mm');
+  var estimatedtime = moment(this.estimatedtime).format('HH:mm');
+
+
+  if(moment(moment().format(this.estdoctime)).format('YYYY-MM-DD') == moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+    // today
+    
+if(currenttime>estimated && currenttime>estimatedtime)
+  {
+    this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),this.esttime),moment(moment().format('YYYY-MM-DD HH:mm')).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+  //alert("current time is bigger");
+  }
+  else if(estimated>currenttime && estimated>estimatedtime)
+  {
+    this.step3(misscallnum,data,this.addminsintime(moment(this.estdoctime).format('HH:mm'),this.esttime),moment(this.estdoctime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+   // alert("estimated doc is bigger");
+  }
+  else if(estimatedtime>currenttime && estimatedtime>currenttime)
+  {
+    this.step3(misscallnum,data,this.addminsintime(moment(this.estimatedtime).format('HH:mm'),this.esttime),moment(this.estimatedtime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+   // alert("estimatedtime is bigger");
+  }
+
+
+   // if(currenttime < estimatedtime){
+               
+     // this.step3(misscallnum,data,this.addminsintime(moment(this.estimatedtime).format('HH:mm'),this.esttime),moment(this.estimatedtime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+      // }else{
+      //this.step3(misscallnum,data,this.addminsintime(moment().format('HH:mm'),this.esttime),moment(moment().format('YYYY-MM-DD HH:mm')).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+      // }
+    
+    
+      }else if(moment(moment().format(this.estdoctime)).format('YYYY-MM-DD') < moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+    //yesterday  
+
+
+    this.step3(misscallnum,data,this.addminsintime(moment(this.estimatedtime).format('HH:mm'),this.esttime),moment(this.estimatedtime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+      }else if(moment(moment().format(this.estdoctime)).format('YYYY-MM-DD') > moment(moment().format('YYYY-MM-DD HH:mm')).format('YYYY-MM-DD')){
+     //tomorrow
+
+     this.step3(misscallnum,data,this.addminsintime(moment(this.estimatedtime).format('HH:mm'),this.esttime),moment(this.estimatedtime).add(this.esttime, 'm').format('YYYY-MM-DD HH:mm'),number); 
+
+      }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+ }
+}
+osbooking(misscallnum,data){
+  this.sendestdate(misscallnum);
+}
+emergbooking(misscallnum,data){
+
+  var number = this.newnumer+1
+  if(number == 1){
+    var mins:any = 0;
+  }else{
+    var mins:any = this.esttime;
+  }
+  var emergtime = moment(this.emergtime).format('HH:mm');
+  var estimatedtime = moment(this.estimatedtime).format('HH:mm');
+    
+if(emergtime > estimatedtime){
+               
+    this.step3(misscallnum,data,this.addminsintime(moment(this.emergtime).format('HH:mm'),mins),moment(this.emergtime).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
+     }else{
+    this.step3(misscallnum,data,this.addminsintime(moment(this.estimatedtime).format('HH:mm'),mins),moment(this.estimatedtime).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
      }
 
 
 
 
-  }else{
-    this.clinicclosedmessage(misscallnum);
-  }
-  
+  this.step3(misscallnum,data,this.addminsintime(moment(this.emergtime).format('HH:mm'),mins),moment(this.emergtime).add(mins, 'm').format('YYYY-MM-DD HH:mm'),number); 
 }
+step3(misscallnum,data,apptime,estimatedtime,number){
+  this.tokendata.checkmisscalldata(misscallnum).then((result: any) => {
+    if (result){
+    this.step4(misscallnum,data,apptime,estimatedtime,number);
+    }else{
+    this.tokenbooking(misscallnum,data,apptime,estimatedtime,number); 
+    }
+  });
 }
+tokenbooking(misscallnum,data,apptime,estimatedtime,number){
+  var this_ = this;
+  var misn = apptime;
+  var datesend = moment(moment(estimatedtime).format('YYYY-MM-DD HH:mm')).calendar();
 
-getmisscallpatientdetails(misscallnum,data){
+
+
+  
+  var message  = "Thanks for reg with "+this_.clinicName.substring(0,19)+", Your token is "+number+" est visiting time "+datesend+".Book thru App for live status and more is.gd/goclinic" ;
+  this.tokendata.getnewtoken(misscallnum,number,data,apptime,estimatedtime).then((result: any) => {
+    if (result) {
+      if(this_.clinicalerton == true){
+        var clinicaartmsg = this.clinicalert.substring(0,150)
+        SMS.sendSMS(misscallnum, clinicaartmsg,function(result){
+        
+          if(result == 'OK'){
+            SMS.sendSMS(misscallnum, message,function(result){
+              if(result == 'OK'){
+               
+               }
+              
+            }, function(e){
+               alert('Error sending SMS.'+e); 
+            });
+          }
+           
+         }, function(e){
+            alert('Error sending SMS.'+e); 
+          });
+
+      }else{
+        SMS.sendSMS(misscallnum, message,function(result){
+          if(result == 'OK'){
+           
+           }
+          
+        }, function(e){
+           alert('Error sending SMS.'+e); 
+        });
+
+      }
+
+    }else{
+      
+   }
+  })
+}
+tokenbookingwithname(misscallnum,data,apptime,estimatedtime,number,patientname){
+  var this_ = this;
+  var misn = apptime;
+
+var datesend = moment(moment(estimatedtime).format('YYYY-MM-DD HH:mm')).calendar();
+ 
+
+
+
+
+
+  
+  var message  = "Thanks for reg with "+this_.clinicName.substring(0,20)+", Your token is "+number+" est visiting time "+datesend+".Book thru App for live status and more is.gd/goclinic" ;
+  this.tokendata.getnewtokenwithdata(misscallnum,number,patientname,data,apptime,estimatedtime).then((result: any) => {
+    if (result) {
+      if(this_.clinicalerton == true){
+        var clinicaartmsg = this.clinicalert.substring(0,150)
+        SMS.sendSMS(misscallnum, clinicaartmsg,function(result){
+        
+          if(result == 'OK'){
+            SMS.sendSMS(misscallnum, message,function(result){
+              if(result == 'OK'){
+               
+               }
+              
+            }, function(e){
+               alert('Error sending SMS.'+e); 
+            });
+          }
+           
+         }, function(e){
+            alert('Error sending SMS.'+e); 
+          });
+
+      }else{
+        SMS.sendSMS(misscallnum, message,function(result){
+          if(result == 'OK'){
+           
+           }
+          
+        }, function(e){
+           alert('Error sending SMS.'+e); 
+        });
+
+      }
+
+   }else{
+  
+  }
+  })
+}
+step4(misscallnum,data,apptime,estimatedtime,number){
   this.tokendata.getmisscallpatientdetails(misscallnum).then((result: any) => {
     if (result) {
       if(result.patientFullName !== undefined && result.patientFullName !==null){
-        this.sendmessagewithname(data,misscallnum,result.patientFullName)
-        //this.getnewtokenwithdata(misscallnum,result.patientFullName,data);
-      }else{
-        this.sendmessage(misscallnum,data); 
-       // this.getnewtoken(misscallnum,data);
-      }
-     
-      
-    
+        this.tokenbookingwithname(misscallnum,data,apptime,estimatedtime,number,result.patientFullName)
+        }else{
+        this.tokenbooking(misscallnum,data,apptime,estimatedtime,number); 
+       } 
     }else{
-    
-      
     }
   })
 }
+
+
+
 getnewtokenwithdata(data,misscallnum,patientname,arrival,nymber){
-  this.tokendata.getnewtokenwithdata(misscallnum,nymber,patientname,data,arrival).then((result: any) => {
-    if (result) {
-      this.sendmsmwithnameestmin(nymber,misscallnum,arrival,patientname);
+  //stoped this funcation
+ // this.tokendata.getnewtokenwithdata(misscallnum,nymber,patientname,data,arrival).then((result: any) => {
+   // if (result) {
+   //   this.sendmsmwithnameestmin(nymber,misscallnum,arrival,patientname);
       
    // this.sendmessagewithname(result,misscallnum,patientname)
   //this.misscallsmswithname(result,misscallnum,patientname);
     
-    }else{
+  //  }else{
       
-   }
-  })
+  // }
+  //})
 }
 getnewtoken(number: number,misscallnum: any,data: any,arrival: string){
-  
-  this.tokendata.getnewtoken(misscallnum,number,data,arrival).then((result: any) => {
-    if (result) {
-      this.sendmsmwithestmin(result,misscallnum,arrival);
+  // stopped this function
+  //this.tokendata.getnewtoken(misscallnum,number,data,arrival).then((result: any) => {
+  //  if (result) {
+  //    this.sendmsmwithestmin(result,misscallnum,arrival);
       
   //this.misscallsms(result,misscallnum);
   // this.sendmessage(result,misscallnum); 
-    }else{
+  //  }else{
       
-   }
-  })
+  // }
+  //})
 }
 
 sendclinicalert(misscallnum){
@@ -556,7 +793,8 @@ getq(){
     this.misscallnum  =  this.mobile.substring(3);
       
        // this.checkpatientdata(this.misscallnum);
-    this.checkpatientdata(this.misscallnum,"mobile");
+       this.step1(this.misscallnum,"mobile");
+  //  this.checkpatientdata(this.misscallnum,"mobile");
     setTimeout(() => {
       this.mobile = "+91";
       this.hivedivon();
@@ -604,150 +842,8 @@ sendestdate(misscallnum){
   });
 
 }
-sendmessagewithname(data,misscallnum,patientname){
-  var number = this.newnumer+1;
-  if(number == 1){
-    var misn =0;
-  }else if(number == 2){
-     misn =this.esttime;
-  }else{
-     misn = (number-this.currq)*this.esttime;
-  }
-
-  if(this.clinicopen ==true){
-   
-    if(this.doctorinout == 1){
-      this.getnewtokenwithdata(data,misscallnum,patientname,this.addminsintime( moment().format('HH:mm'),misn),number);
-      //this.sendmsmwithnameestmin(number,misscallnum,this.addminsintime( moment().format('HH:mm'),misn),patientname)
-    
-    }else if(this.doctorinout == 2){
 
 
-      if(this.estdoctime == null)
-      {
-      
-              if(this.clinicopeningtime > moment().format('HH:mm'))
-              { 
-                this.getnewtokenwithdata(data,misscallnum,patientname,this.addminsintime(this.formatAMPM(this.clinicopeningtime) ,misn),number);
-            //  this.sendmsmwithnameestmin(number,misscallnum,this.addminsintime(this.formatAMPM(this.clinicopeningtime) ,misn),patientname)
-               
-              }else
-              { 
-                this.getnewtokenwithdata(data,misscallnum,patientname,this.addminsintime( moment().format('HH:mm'),misn),number);
-
-            //  this.sendmsmwithnameestmin(number,misscallnum,this.addminsintime( moment().format('HH:mm'),misn),patientname)
-              }
-
-      }
-      else 
-      {
-       
-                if(this.estdoctime > moment().format('HH:mm'))
-                { 
-                  this.getnewtokenwithdata(data,misscallnum,patientname,this.addminsintime( this.estdoctime,misn),number);
-              //  this.sendmsmwithnameestmin(number,misscallnum,this.addminsintime( this.estdoctime,misn),patientname)
-               
-                }else
-                { 
-                  this.getnewtokenwithdata(data,misscallnum,patientname,this.addminsintime( moment().format('HH:mm'),misn),number);
-               // this.sendmsmwithnameestmin(number,misscallnum,this.addminsintime( moment().format('HH:mm'),misn),patientname)
-                  
-                }
-      }
-    }
-
-
-
-
-
-
-
-
-
-
-  }else{
-
-  }
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-}
-sendmessage(misscallnum: any,data: any){
-  var number = this.newnumer+1;
-  if(number == 1){
-    var misn =0;
-  }else if(number == 2){
-     misn =this.esttime;
-  }else{
-    misn = (number-this.currq)*this.esttime;
-  }
-
-  if(this.clinicopen ==true){
-   
-    if(this.doctorinout == 1){
-      console.log("running this")
-      this.getnewtoken(number,misscallnum,data,this.addminsintime( moment().format('HH:mm'),misn));
-      //this.sendmsmwithestmin(number,misscallnum,this.addminsintime( moment().format('HH:mm'),misn))
-    }else if(this.doctorinout == 2){
-
-
-      if(this.estdoctime == null)
-      {
-      //  console.log("this.clinicopeningtime > this.currenttime"+this.clinicopeningtime + moment().format('HH:mm'))
-       // console.log("running this")
-              if(this.clinicopeningtime > moment().format('HH:mm'))
-              { //console.log("running this")
-              this.getnewtoken(number,misscallnum,data,this.addminsintime(this.formatAMPM(this.clinicopeningtime) ,misn));
-               // this.sendmsmwithestmin(number,misscallnum,this.addminsintime(this.formatAMPM(this.clinicopeningtime) ,misn))
-              }else
-              { //console.log("running this")
-              this.getnewtoken(number,misscallnum,data,this.addminsintime(moment().format('HH:mm'),misn));
-               // this.sendmsmwithestmin(number,misscallnum,this.addminsintime(moment().format('HH:mm'),misn))
-              }
-
-      }
-      else 
-      {
-       // console.log("running this")
-                if(this.estdoctime > moment().format('HH:mm'))
-                { //console.log("running this")
-                this.getnewtoken(number,misscallnum,data,this.addminsintime( this.estdoctime,misn));
-               //  this.sendmsmwithestmin(number,misscallnum,this.addminsintime( this.estdoctime,misn))
-                }else
-                { //console.log("running this")
-                this.getnewtoken(number,misscallnum,data,this.addminsintime(moment().format('HH:mm'),misn));
-                //  this.sendmsmwithestmin(number,misscallnum,this.addminsintime(moment().format('HH:mm'),misn))
-                }
-      }
-    }
-
-
-
-
-
-
-
-
-
-
-  }else{
-
-  }
-  
- 
-}
 clinicclosedmessage(misscallnum){
   var message  = this.clinicName.substring(0,22) +" is Closed or Not Accepting New Token, Please give misscall at "+this.formatAMPM(this.clinicopeningtime)+".For more details is.gd/goclinic" ;
   SMS.sendSMS(misscallnum, message,function(result){
@@ -760,6 +856,7 @@ clinicclosedmessage(misscallnum){
      alert('Error sending SMS.'+e); 
   });
 }
+
 sendmsmwithestmin(number,misscallnum,est){
   var this_ = this;
   var misn = est;
@@ -777,23 +874,7 @@ sendmsmwithestmin(number,misscallnum,est){
    });
   
 }
-sendmsmwithnameestmin(number,misscallnum,est,name){
-  var misn = est;
-  var this_ = this;
-  var message  = "Hi "+name.substring(0,10)+",Thanks for reg with "+this_.clinicName.substring(0,21)+",Your token is "+number+" est visiting time "+misn+".Book thru App next time for live status is.gd/goclinic" ;
-  
-   SMS.sendSMS(misscallnum, message,function(result){
-    if(result == 'OK'){
-      if(this_.clinicalerton == true){
-        this_.sendclinicalert(misscallnum);
-       }
-     }
-    
-  }, function(e){
-     alert('Error sending SMS.'+e); 
-  });
-  
-}
+
 
 getcurrenttime(){
   var now = new Date();
