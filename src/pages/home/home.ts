@@ -38,6 +38,7 @@ export class HomePage {
   playcallsound:boolean=false;
   misscallnumber: any;
   misscallnum: any;
+  onloadid :boolean = true;
   newnumer: any;
   esttime: any;
   callingnumber: any;
@@ -372,11 +373,12 @@ var idata = 'nextQ';
     this.zone.run(() => {
       if(this.playnextsound !== false){
         this.playnext();
+        this.currq  = data.val();
+        this.nextq = data.val();
+        this.getpatientlist(data.val(),idata);
       }
     
-      this.currq  = data.val();
-      this.nextq = data.val();
-      this.getpatientlist(data.val(),idata);
+     
       this.playnextsound = true
   });
     
@@ -580,42 +582,53 @@ tokenbooking(misscallnum,data,apptime,estimatedtime,number){
   var misn = apptime;
   var datesend = moment(moment(estimatedtime).format('YYYY-MM-DD HH:mm')).calendar();
 
+if(this_.clinicalerton == true){
+  if(this_.clinicalert.length < 75){
+    var sendsecondsms = false;
+    var message = this_.clinicalert+", Your token "+number+" Appt time "+datesend+" .For more details is.gd/goclinic"
+  }else{
+    var sendsecondsms = true;
+    var message =  this_.clinicName.substring(0,19)+", Your token is"+number+" Appt time "+datesend+".for more details is.gd/goclinic" ;
+  }
+}else{
+  var sendsecondsms = false;
+  var message = this_.clinicName.substring(0,19)+", Your token is"+number+" Appt time "+datesend+".for more details is.gd/goclinic" ;
+}
+
 
 
   
-  var message  = "Thanks for reg with "+this_.clinicName.substring(0,19)+", Your token is "+number+" est visiting time "+datesend+".Book thru App for live status and more is.gd/goclinic" ;
   this.tokendata.getnewtoken(misscallnum,number,data,apptime,estimatedtime).then((result: any) => {
     if (result) {
-      if(this_.clinicalerton == true){
-        var clinicaartmsg = this.clinicalert.substring(0,150)
-        SMS.sendSMS(misscallnum, clinicaartmsg,function(result){
+if(sendsecondsms == true){
+  var clinicaartmsg = this.clinicalert.substring(0,150)
+  SMS.sendSMS(misscallnum, clinicaartmsg,function(result){
+  
+    if(result == 'OK'){
+      SMS.sendSMS(misscallnum, message,function(result){
+        if(result == 'OK'){
+         
+         }
         
-          if(result == 'OK'){
-            SMS.sendSMS(misscallnum, message,function(result){
-              if(result == 'OK'){
-               
-               }
-              
-            }, function(e){
-               alert('Error sending SMS.'+e); 
-            });
-          }
-           
-         }, function(e){
-            alert('Error sending SMS.'+e); 
-          });
+      }, function(e){
+         alert('Error sending SMS.'+e); 
+      });
+    }
+     
+   }, function(e){
+      alert('Error sending SMS.'+e); 
+    });
+}else{
+  SMS.sendSMS(misscallnum, message,function(result){
+    if(result == 'OK'){
+     
+     }
+    
+  }, function(e){
+     alert('Error sending SMS.'+e); 
+  });
+}
 
-      }else{
-        SMS.sendSMS(misscallnum, message,function(result){
-          if(result == 'OK'){
-           
-           }
-          
-        }, function(e){
-           alert('Error sending SMS.'+e); 
-        });
-
-      }
 
     }else{
       
@@ -627,17 +640,27 @@ tokenbookingwithname(misscallnum,data,apptime,estimatedtime,number,patientname){
   var misn = apptime;
 
 var datesend = moment(moment(estimatedtime).format('YYYY-MM-DD HH:mm')).calendar();
- 
+if(this_.clinicalerton == true){
+  if(this_.clinicalert.length < 75){
+    var sendsecondsms = false;
+    var message = this_.clinicalert+", Your token "+number+" Appt time "+datesend+" .For more details is.gd/goclinic"
+  }else{
+    var sendsecondsms = true;
+    var message =  this_.clinicName.substring(0,19)+", Your token is"+number+" Appt time "+datesend+".for more details is.gd/goclinic" ;
+  }
+}else{
+  var sendsecondsms = false;
+  var message = this_.clinicName.substring(0,19)+", Your token is"+number+" Appt time "+datesend+".for more details is.gd/goclinic" ;
+}
 
 
 
 
 
   
-  var message  = "Thanks for reg with "+this_.clinicName.substring(0,20)+", Your token is "+number+" est visiting time "+datesend+".Book thru App for live status and more is.gd/goclinic" ;
   this.tokendata.getnewtokenwithdata(misscallnum,number,patientname,data,apptime,estimatedtime).then((result: any) => {
     if (result) {
-      if(this_.clinicalerton == true){
+      if(sendsecondsms == true){
         var clinicaartmsg = this.clinicalert.substring(0,150)
         SMS.sendSMS(misscallnum, clinicaartmsg,function(result){
         
@@ -655,7 +678,6 @@ var datesend = moment(moment(estimatedtime).format('YYYY-MM-DD HH:mm')).calendar
          }, function(e){
             alert('Error sending SMS.'+e); 
           });
-
       }else{
         SMS.sendSMS(misscallnum, message,function(result){
           if(result == 'OK'){
@@ -665,8 +687,8 @@ var datesend = moment(moment(estimatedtime).format('YYYY-MM-DD HH:mm')).calendar
         }, function(e){
            alert('Error sending SMS.'+e); 
         });
-
       }
+      
 
    }else{
   

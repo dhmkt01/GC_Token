@@ -36,15 +36,17 @@ page-home {
       }
       .redcolorclassname{
         color:white;
-        white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 0.8rem;
-    margin-bottom: 0.8rem;
-    font-weight: 500;
-    line-height: 1;
-    text-decoration: underline;
-        font-size: 60px;
+       // white-space: nowrap;
+        word-break: break-all;
+   // overflow: hidden;
+   // text-overflow: ellipsis;
+   margin-top: 0.0rem;
+  margin-bottom: 0.8rem;
+    //font-weight: 500;
+    //line-height: 1;
+    //text-decoration: underline;
+        font-size: 50px;
+        width: 400px; 
       }
       .buttonfornum {
         border: 1px solid white;
